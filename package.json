@@ -1,0 +1,17 @@
+{
+  "name": "eduhandover",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EduHandover — Bridge every classroom transition. Monorepo (frontend + backend).",
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "build": "npm run build --workspaces --if-present",
+    "seed": "npm run seed -w backend",
+    "migrate": "npm run migrate -w backend",
+    "test": "npm test -w backend",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "workspaces": ["frontend", "backend"]
+}

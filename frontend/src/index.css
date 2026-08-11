@@ -1,0 +1,293 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --eh-canvas: #f4f6fb;
+  --eh-card: #ffffff;
+  --eh-primary-light: #eef2ff;
+  --eh-muted: #64748b;
+  --eh-ink: #0f172a;
+  --eh-border-soft: #e2e8f0;
+  --eh-bg-a: #eef2ff;
+  --eh-bg-b: #f8fafc;
+  --eh-bg-c: #f1f5f9;
+  --eh-shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --eh-shadow-lift: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+.dark {
+  --eh-canvas: #0b1220;
+  --eh-card: #0f1a2e;
+  --eh-primary-light: #1c2650;
+  --eh-muted: #94a3b8;
+  --eh-ink: #e6ecf7;
+  --eh-border-soft: #1e293b;
+  --eh-bg-a: #0b1120;
+  --eh-bg-b: #0f1a2e;
+  --eh-bg-c: #0b1220;
+  --eh-shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --eh-shadow-lift: 0 16px 40px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-canvas: var(--eh-canvas);
+  --color-card: var(--eh-card);
+  --color-primary: #4f46e5;
+  --color-primary-light: var(--eh-primary-light);
+  --color-primary-dark: #4338ca;
+  --color-accent: #22c55e;
+  --color-accent-light: #dcfce7;
+  --color-cta: #facc15;
+  --color-cta-dark: #eab308;
+  --color-muted: var(--eh-muted);
+  --color-ink: var(--eh-ink);
+  --color-border-soft: var(--eh-border-soft);
+
+  --radius-card: 20px;
+  --radius-pill: 9999px;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: var(--eh-shadow-soft);
+  --shadow-lift: var(--eh-shadow-lift);
+}
+
+body {
+  background-color: var(--eh-canvas);
+  background-image: linear-gradient(160deg, var(--eh-bg-a) 0%, var(--eh-bg-b) 50%, var(--eh-bg-c) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--eh-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ---------- Theme switch fade ---------- */
+.theme-switching,
+.theme-switching * {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease !important;
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes float-reverse {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(12px) rotate(2deg);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.08);
+  }
+  66% {
+    transform: translate(-24px, 28px) scale(0.94);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(90deg);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+}
+
+@keyframes ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes gradient-border {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ---------- Animation utilities ---------- */
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.28s ease-out both;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 9s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
+
+.animate-drift-slow {
+  animation: drift 26s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.6s ease-in-out infinite;
+}
+
+.ping-soft {
+  animation: ping-soft 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ---------- Animated gradient text ---------- */
+.text-gradient-animated {
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #db2777, #f59e0b, #4f46e5);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 7s linear infinite;
+}
+
+/* ---------- Animated gradient border ---------- */
+.gradient-ring {
+  position: relative;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #db2777, #4f46e5);
+  background-size: 300% 100%;
+  animation: gradient-border 8s linear infinite;
+  padding: 2px;
+}
+
+/* ---------- Frosted glass card ---------- */
+.glass {
+  background: color-mix(in oklab, var(--eh-card) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

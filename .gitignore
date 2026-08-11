@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Builds
+frontend/dist/
+backend/dist/
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.test
+*.env.production.example
+
+# Prisma generated client
+backend/src/generated/
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db

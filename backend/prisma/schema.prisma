@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  PLATFORM_ADMIN
+}
+
+enum LeadStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum HandoverStatus {
+  DRAFT
+  SUBMITTED
+  ARCHIVED
+}
+
+enum TagCategory {
+  LEARNING_STYLE
+  FOCUS_TRIGGER
+  BEHAVIORAL_STRENGTH
+}
+
+model School {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  users     User[]
+  classes   Class[]
+  students  Student[]
+}
+
+model User {
+  id                       String               @id @default(uuid())
+  email                    String               @unique
+  passwordHash             String
+  firstName                String
+  lastName                 String
+  role                     Role
+  schoolId                 String?
+  joinedAt                 DateTime             @default(now())
+  activationToken          String?              @unique
+  activationTokenExpiresAt DateTime?
+  school                   School?              @relation(fields: [schoolId], references: [id])
+  classes            Class[]              @relation("ClassTeacher")
+  createdHandovers   HandoverProfile[]    @relation("HandoverCreator")
+  receivedHandovers  HandoverProfile[]    @relation("HandoverReceiver")
+  acknowledgments    AcknowledgmentLog[]
+  handledLeads       Lead[]               @relation("LeadHandler")
+}
+
+model Class {
+  id           String    @id @default(uuid())
+  name         String
+  academicYear String
+  schoolId     String
+  teacherId    String
+  school       School    @relation(fields: [schoolId], references: [id])
+  teacher      User      @relation("ClassTeacher", fields: [teacherId], references: [id])
+  students     Student[]
+
+  @@unique([schoolId, name, academicYear])
+}
+
+model Student {
+  id             String            @id @default(uuid())
+  firstName      String
+  lastName       String
+  gradeLevel     String
+  schoolId       String
+  currentClassId String?
+  school         School            @relation(fields: [schoolId], references: [id])
+  currentClass   Class?            @relation(fields: [currentClassId], references: [id])
+  handoverProfiles HandoverProfile[]
+
+  @@index([schoolId])
+}
+
+model Tag {
+  id       String      @id @default(uuid())
+  label    String
+  category TagCategory
+  slug     String      @unique
+  isActive Boolean     @default(true)
+}
+
+model Lead {
+  id           String     @id @default(uuid())
+  fullName     String
+  workEmail    String
+  schoolName   String
+  studentCount String
+  message      String?
+  status       LeadStatus @default(PENDING)
+  handledById  String?
+  handledAt    DateTime?
+  createdAt    DateTime   @default(now())
+  handledBy    User?      @relation("LeadHandler", fields: [handledById], references: [id])
+
+  @@index([status])
+  @@index([handledById])
+}
+
+model HandoverProfile {
+  id               String             @id @default(uuid())
+  studentId        String
+  creatorId        String
+  receiverId       String?
+  academicYear     String
+  learningStyles   String[]
+  focusTriggers    String[]
+  behavioralTags   String[]
+  notesEncrypted   String?
+  status           HandoverStatus     @default(DRAFT)
+  isAcknowledged   Boolean            @default(false)
+  acknowledgedAt   DateTime?
+  submittedAt      DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  student          Student            @relation(fields: [studentId], references: [id])
+  creator          User               @relation("HandoverCreator", fields: [creatorId], references: [id])
+  receiver         User?              @relation("HandoverReceiver", fields: [receiverId], references: [id])
+  acknowledgments  AcknowledgmentLog[]
+
+  @@index([studentId, academicYear, status])
+}
+
+model AcknowledgmentLog {
+  id             String          @id @default(uuid())
+  handoverId     String
+  teacherId      String
+  acknowledgedAt DateTime        @default(now())
+  handover       HandoverProfile @relation(fields: [handoverId], references: [id])
+  teacher        User            @relation(fields: [teacherId], references: [id])
+}
