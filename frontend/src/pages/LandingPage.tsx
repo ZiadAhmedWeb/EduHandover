@@ -183,8 +183,8 @@ export default function LandingPage() {
             className="mx-auto mt-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-ink animate-fade-in sm:text-5xl lg:text-6xl"
             style={{ animationDelay: "100ms" }}
           >
-            Bridge every{" "}
-            <span className="text-gradient-animated">classroom transition</span> in minutes
+            Where Student Insights{" "}
+            <span className="text-gradient-animated">Never Get Left Behind.</span>
           </h1>
           <p
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted animate-fade-in sm:text-lg"
